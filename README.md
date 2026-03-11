@@ -1,17 +1,35 @@
-# GenAI Analyst
+<h1 align="center">GenAI Analyst</h1>
 
-GenAI Analyst is a full-stack data analysis app that lets you upload a CSV or Excel file, inspect the dataset, generate visualizations, ask natural-language questions, and export an AI-assisted report in Markdown or PDF.
+<p align="center">
+  AI-assisted data analysis with upload, profiling, visualizations, Q&A, and exportable reports.
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-React%2019-61DAFB?style=for-the-badge&logo=react&logoColor=0b1020" alt="React 19" />
+  <img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/AI-Groq-F55036?style=for-the-badge" alt="Groq" />
+  <img src="https://img.shields.io/badge/Charts-Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white" alt="Plotly" />
+  <img src="https://img.shields.io/badge/Reports-PDF%20%26%20Markdown-7C3AED?style=for-the-badge" alt="Reports" />
+</p>
 
-- Upload CSV and Excel datasets
-- View dataset metadata, preview rows, and summary analysis
-- Generate visualizations from the uploaded data
-- Generate AI insights from dataset summaries
-- Ask dataset questions in natural language
-- Export reports as Markdown or PDF
+---
 
-## Tech Stack
+## Overview
+
+GenAI Analyst is a full-stack application for exploring tabular datasets with a workflow that feels closer to an analyst assistant than a raw dashboard. You can upload a CSV or Excel file, inspect the dataset, generate charts, ask questions in natural language, and export an AI-assisted report in Markdown or PDF.
+
+## What It Does
+
+| Area | Capability |
+| --- | --- |
+| Upload | Accepts CSV and Excel datasets |
+| Overview | Shows dataset metadata, preview rows, and summary analysis |
+| Visualizations | Generates charts from the uploaded data |
+| AI Insights | Produces narrative insights from dataset summaries |
+| Q&A | Answers natural-language questions about the dataset |
+| Reports | Exports Markdown and PDF reports |
+
+## Stack
 
 ### Frontend
 
@@ -28,7 +46,7 @@ GenAI Analyst is a full-stack data analysis app that lets you upload a CSV or Ex
 - Groq API
 - fpdf2
 
-## Project Structure
+## Project Layout
 
 ```text
 backend/
@@ -43,7 +61,7 @@ frontend/
 sample_data.csv
 ```
 
-## Setup
+## Quick Start
 
 ### 1. Clone the repository
 
@@ -52,9 +70,7 @@ git clone https://github.com/muddaBTW/genai-analyst.git
 cd genai-analyst
 ```
 
-### 2. Backend setup
-
-Create and activate a virtual environment, then install dependencies:
+### 2. Set up the backend
 
 ```bash
 cd backend
@@ -63,7 +79,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Create a `.env` file inside `backend/`:
+Create `backend/.env`:
 
 ```env
 GROQ_API_KEY=your_groq_api_key_here
@@ -75,7 +91,7 @@ Start the backend:
 python -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-### 3. Frontend setup
+### 3. Set up the frontend
 
 In a separate terminal:
 
@@ -85,38 +101,39 @@ npm install
 npm run dev
 ```
 
-The frontend runs on `http://localhost:5173` by default.
+Frontend default URL: `http://localhost:5173`
 
-## How It Works
+## Workflow
 
 1. Upload a dataset from the `Upload` section.
-2. The app stores the dataset in memory on the backend.
+2. The backend stores the dataframe in memory for the current session.
 3. Analysis, charts, and AI insights are generated after upload.
-4. You can inspect dataset details, ask questions, and export a report.
+4. You can inspect the dataset, ask questions, and export a report.
 
 ## Report Generation
 
-The exported report combines:
+The exported report is a mix of:
 
-- Data-derived summary content from the uploaded dataset
-- AI-generated insights and report narrative
-- PDF formatting and section layout defined in backend code
+- data-derived summary content from the uploaded dataset
+- AI-generated narrative sections and insights
+- backend-defined report formatting and PDF layout
 
-## API Overview
+## API Surface
 
 The backend exposes routes under `/api` for:
 
-- upload
-- analysis
-- visualizations
-- insights
-- query
-- report
+- `upload`
+- `analysis`
+- `visualizations`
+- `insights`
+- `query`
+- `report`
 
 ## Notes
 
-- The backend currently uses in-memory dataset storage for a simple single-user workflow.
-- A valid Groq API key is required for AI insights, Q&A, and report generation.
+> The current implementation uses in-memory dataset storage, which keeps the app simple for local use and single-user workflows.
+
+> A valid `GROQ_API_KEY` is required for AI insights, natural-language Q&A, and report generation.
 
 ## License
 
