@@ -2,7 +2,8 @@
  * API Client — centralised HTTP helpers for the backend.
  */
 
-const BASE = "http://localhost:8000/api";
+// Use VITE_API_BASE_URL if set, otherwise use relative path so it hits Vercel's /api internally, otherwise fallback to localhost for dev
+const BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? "/api" : "http://localhost:8000/api");
 
 /**
  * Upload a dataset file.
