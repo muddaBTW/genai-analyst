@@ -1,0 +1,21 @@
+Product,Category,Region,Revenue,Profit,Units_Sold,Customer_Rating,Discount_Percent
+Laptop Pro,Electronics,North,1200,350,150,4.5,10
+Wireless Mouse,Electronics,South,25,12,2000,4.2,5
+Office Chair,Furniture,East,450,120,300,3.8,15
+Standing Desk,Furniture,West,800,200,180,4.6,8
+Headphones,Electronics,North,150,65,900,4.1,12
+Monitor 27in,Electronics,East,350,95,400,4.4,7
+Keyboard Mech,Electronics,South,90,40,1200,4.3,10
+Desk Lamp,Furniture,West,60,25,800,3.5,20
+Webcam HD,Electronics,North,80,30,1500,3.9,15
+Printer LaserJet,Electronics,East,300,80,250,3.7,5
+Bookshelf,Furniture,South,200,70,350,4.0,10
+Filing Cabinet,Furniture,North,180,55,200,3.6,18
+USB Hub,Electronics,West,35,18,3000,4.2,8
+Tablet 10in,Electronics,South,500,150,600,4.5,12
+Ergonomic Mouse,Electronics,East,70,30,1800,4.3,10
+Whiteboard,Furniture,North,120,45,400,3.9,15
+Coffee Table,Furniture,West,350,100,150,4.1,20
+Monitor Stand,Furniture,South,80,35,900,4.0,10
+Power Strip,Electronics,East,20,8,5000,3.8,5
+Desk Organizer,Furniture,North,40,15,2500,3.4,25
