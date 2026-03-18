@@ -7,7 +7,6 @@ import plotly.graph_objects as go
 import pandas as pd
 import json
 import numpy as np
-from scipy import stats
 
 
 def _fig_to_json(fig) -> dict:
