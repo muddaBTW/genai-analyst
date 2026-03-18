@@ -210,8 +210,7 @@ def generate_scatter_plots(df: pd.DataFrame, max_plots: int = 3) -> list[dict]:
             df, x=a, y=b, title=f"{a} vs {b} (r={corr_val:.2f})",
             template="plotly_dark",
             color_discrete_sequence=["#f472b6"],
-            opacity=0.7,
-            trendline="ols" if len(df) > 5 else None
+            opacity=0.7
         )
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
