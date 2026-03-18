@@ -23,6 +23,9 @@ def get_insights():
     try:
         insights = generate_insights(summary)
     except Exception as e:
-        raise HTTPException(502, f"AI service error: {e}")
+        raise HTTPException(
+            502,
+            f"AI service error: {e}. Check backend/.env GROQ_API_KEY and restart the backend server.",
+        )
 
     return {"insights": insights}

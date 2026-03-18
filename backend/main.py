@@ -7,10 +7,12 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
+from pathlib import Path
 import traceback
 
-# Load environment variables from .env (override system env vars)
-load_dotenv(override=True)
+# Load backend/.env even when the server is started from the repo root.
+ENV_FILE = Path(__file__).resolve().parent / ".env"
+load_dotenv(dotenv_path=ENV_FILE, override=True)
 
 # Import routers
 from routers import upload, analysis, visualizations, insights, query, report
