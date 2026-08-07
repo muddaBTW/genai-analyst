@@ -27,7 +27,7 @@ def _settings() -> tuple[str, str, str]:
     provider = (os.getenv("AI_PROVIDER") or ("gemini" if os.getenv("GEMINI_API_KEY") else "groq")).strip().lower()
     if provider == "gemini":
         key = (os.getenv("GEMINI_API_KEY") or "").strip().strip("\"'")
-        model = (os.getenv("GEMINI_MODEL") or "gemini-3.5-flash").strip()
+        model = (os.getenv("GEMINI_MODEL") or "gemini-3.1-flash-lite").strip()
         if not key:
             raise RuntimeError("GEMINI_API_KEY environment variable is not set")
         return provider, key, model

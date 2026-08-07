@@ -84,7 +84,7 @@ Create `backend/.env`:
 ```env
 AI_PROVIDER=gemini
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-3.5-flash
+GEMINI_MODEL=gemini-3.1-flash-lite
 # Optional Groq fallback:
 # AI_PROVIDER=groq
 # GROQ_API_KEY=your_groq_api_key_here
