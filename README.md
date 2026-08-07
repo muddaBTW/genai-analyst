@@ -82,7 +82,12 @@ pip install -r requirements.txt
 Create `backend/.env`:
 
 ```env
-GROQ_API_KEY=your_groq_api_key_here
+AI_PROVIDER=gemini
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+# Optional Groq fallback:
+# AI_PROVIDER=groq
+# GROQ_API_KEY=your_groq_api_key_here
 ```
 
 Start the backend:
@@ -133,7 +138,7 @@ The backend exposes routes under `/api` for:
 
 > The current implementation uses in-memory dataset storage, which keeps the app simple for local use and single-user workflows.
 
-> A valid `GROQ_API_KEY` is required for AI insights, natural-language Q&A, and report generation.
+> A valid API key for the configured provider is required for AI insights, natural-language Q&A, chart explanations, and report generation.
 
 ## License
 

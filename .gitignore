@@ -9,6 +9,9 @@ venv/
 # Environment
 .env
 
+# Local RAG artifacts — can contain uploaded rows and are not persistent on Vercel
+backend/.vector_store/
+
 # Frontend
 frontend/node_modules/
 frontend/dist/

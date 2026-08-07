@@ -9,6 +9,8 @@ export default function AskQuestions({ hasDataset }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const [retrievedContext, setRetrievedContext] = useState(null);
+    const [showRetrieved, setShowRetrieved] = useState(false);
     const bottomRef = useRef(null);
 
     // Auto-scroll to bottom on new messages
@@ -20,13 +22,22 @@ export default function AskQuestions({ hasDataset }) {
         const q = input.trim();
         if (!q || loading) return;
 
-        setMessages((prev) => [...prev, { role: "user", text: q }]);
+            setMessages((prev) => [...prev, { role: "user", text: q }]);
         setInput("");
         setLoading(true);
 
         try {
-            const data = await askQuestion(q);
-            setMessages((prev) => [...prev, { role: "ai", text: data.answer }]);
+                const history = messages.slice(-8).map(({ role, text }) => ({ role, text }));
+                const data = await askQuestion(q, history);
+                // store retrieved context separately (hidden by default)
+                if (data.retrieved && Array.isArray(data.retrieved) && data.retrieved.length > 0) {
+                    setRetrievedContext(data.retrieved);
+                    setShowRetrieved(false);
+                } else {
+                    setRetrievedContext(null);
+                    setShowRetrieved(false);
+                }
+                setMessages((prev) => [...prev, { role: "ai", text: data.answer }]);
         } catch (err) {
             setMessages((prev) => [
                 ...prev,
@@ -78,6 +89,30 @@ export default function AskQuestions({ hasDataset }) {
                             )}
                         </div>
                     ))}
+
+                    {/* Retrieved context toggle (hidden by default) */}
+                    {retrievedContext && (
+                        <div style={{ margin: "10px 0 20px 0" }}>
+                            <button
+                                className="btn"
+                                onClick={() => setShowRetrieved((s) => !s)}
+                            >
+                                {showRetrieved ? "Hide Retrieved Context" : `Show Retrieved Context (${retrievedContext.length})`}
+                            </button>
+                            {showRetrieved && (
+                                <div className="glass-card" style={{ marginTop: 8, padding: 10 }}>
+                                    <strong>Retrieved:</strong>
+                                    <ul style={{ marginTop: 8 }}>
+                                        {retrievedContext.slice(0, 20).map((r, idx) => (
+                                            <li key={idx} style={{ fontSize: 13 }}>
+                                                {r.text} {r.score ? `(score: ${Number(r.score).toFixed(3)})` : ""}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {loading && (
                         <div className="chat-bubble ai" style={{ opacity: 0.6 }}>

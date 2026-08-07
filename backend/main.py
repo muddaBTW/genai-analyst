@@ -15,7 +15,7 @@ ENV_FILE = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path=ENV_FILE, override=True)
 
 # Import routers
-from routers import upload, analysis, visualizations, insights, query, report
+from routers import upload, analysis, visualizations, insights, query, report, retrieval
 
 app = FastAPI(
     title="GenAI Data Analyst API",
@@ -38,6 +38,7 @@ app.include_router(visualizations.router, prefix="/api", tags=["Visualizations"]
 app.include_router(insights.router, prefix="/api", tags=["AI Insights"])
 app.include_router(query.router, prefix="/api", tags=["Query"])
 app.include_router(report.router, prefix="/api", tags=["Report"])
+app.include_router(retrieval.router, prefix="/api", tags=["Retrieval"])
 
 
 # ── Global exception handler — ensures CORS headers on ALL errors ──────────

@@ -3,7 +3,8 @@
  */
 
 // Use VITE_API_BASE_URL if set, otherwise use relative path so it hits Vercel's /api internally, otherwise fallback to localhost for dev
-const BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? "/api" : "http://localhost:8001/api");
+// Default dev backend port changed to 8000 (local FastAPI default)
+const BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? "/api" : "http://localhost:8000/api");
 
 /**
  * Upload a dataset file.
@@ -49,13 +50,33 @@ export async function fetchInsights() {
  * Ask a natural-language question about the dataset.
  * @param {string} question
  */
-export async function askQuestion(question) {
+export async function askQuestion(question, history = []) {
   const res = await fetch(`${BASE}/query`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ question, history }),
   });
   if (!res.ok) throw new Error((await res.json()).detail || "Query failed");
+  return res.json();
+}
+
+/** Get a concise AI explanation of why a chart was generated. */
+export async function explainVisualization(chart) {
+  const res = await fetch(`${BASE}/visualizations/explain`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chart }),
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Explanation failed");
+  return res.json();
+}
+
+/**
+ * Build or rebuild the vector index (RAG) on the backend.
+ */
+export async function buildIndex() {
+  const res = await fetch(`${BASE}/index`, { method: "POST" });
+  if (!res.ok) throw new Error((await res.json()).detail || "Index build failed");
   return res.json();
 }
 

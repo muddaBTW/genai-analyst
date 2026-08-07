@@ -1,5 +1,5 @@
 """
-Insights Router — sends dataset summary to Groq LLM and returns AI insights.
+Insights Router — sends a dataset summary to the configured AI provider.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -25,7 +25,7 @@ def get_insights():
     except Exception as e:
         raise HTTPException(
             502,
-            f"AI service error: {e}. Check backend/.env GROQ_API_KEY and restart the backend server.",
+            f"AI service error: {e}. Check your configured provider credentials in backend/.env and restart the backend server.",
         )
 
     return {"insights": insights}

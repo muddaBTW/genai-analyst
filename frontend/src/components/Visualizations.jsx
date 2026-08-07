@@ -4,6 +4,38 @@
 import { useState } from "react";
 import Plot from "react-plotly.js";
 import LoadingSpinner from "./LoadingSpinner";
+import ReactMarkdown from "react-markdown";
+import { explainVisualization } from "../api/client";
+
+function WhyThisChart({ chart, explanation, isLoading, onExplain, onClose }) {
+    return (
+        <div style={{ position: "absolute", left: 12, top: 12, zIndex: 10, maxWidth: "calc(100% - 120px)" }}>
+            <button
+                onClick={onExplain}
+                disabled={isLoading}
+                style={{
+                    background: "rgba(99, 102, 241, 0.18)", border: "1px solid rgba(129, 140, 248, 0.45)",
+                    color: "#c7d2fe", borderRadius: 4, padding: "6px 10px", cursor: isLoading ? "wait" : "pointer", fontSize: 12,
+                }}
+            >
+                {isLoading ? "Explaining…" : explanation ? "Hide explanation" : "Why this chart?"}
+            </button>
+            {explanation && (
+                <div className="glass-card" style={{ marginTop: 8, padding: "10px 12px", fontSize: 13, lineHeight: 1.45, position: "relative" }}>
+                    <button
+                        onClick={onClose}
+                        aria-label="Close chart explanation"
+                        title="Close explanation"
+                        style={{ position: "absolute", top: 4, right: 6, background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 18 }}
+                    >
+                        ×
+                    </button>
+                    <ReactMarkdown>{explanation}</ReactMarkdown>
+                </div>
+            )}
+        </div>
+    );
+}
 
 function ChartModal({ chart, onClose }) {
     if (!chart) return null;
@@ -103,6 +135,35 @@ function ChartModal({ chart, onClose }) {
 
 export default function Visualizations({ charts: rawData, isLoading }) {
     const [expandedChart, setExpandedChart] = useState(null);
+    const [explanations, setExplanations] = useState({});
+    const [explaining, setExplaining] = useState({});
+
+    const requestExplanation = async (key, chart) => {
+        if (explaining[key]) return;
+        if (explanations[key]) {
+            setExplanations((current) => {
+                const next = { ...current };
+                delete next[key];
+                return next;
+            });
+            return;
+        }
+        setExplaining((current) => ({ ...current, [key]: true }));
+        try {
+            const result = await explainVisualization(chart);
+            setExplanations((current) => ({ ...current, [key]: result.explanation }));
+        } catch (error) {
+            setExplanations((current) => ({ ...current, [key]: `Unable to generate an explanation: ${error.message}` }));
+        } finally {
+            setExplaining((current) => ({ ...current, [key]: false }));
+        }
+    };
+
+    const closeExplanation = (key) => setExplanations((current) => {
+        const next = { ...current };
+        delete next[key];
+        return next;
+    });
 
     if (isLoading) return <LoadingSpinner text="Generating charts…" />;
     if (!rawData) return null;
@@ -136,6 +197,13 @@ export default function Visualizations({ charts: rawData, isLoading }) {
             {/* ── Correlation Heatmap (full width) ────────────── */}
             {charts.heatmap && (
                 <div className="chart-card" style={{ marginBottom: 20, position: "relative" }}>
+                    <WhyThisChart
+                        chart={charts.heatmap}
+                        explanation={explanations.heatmap}
+                        isLoading={explaining.heatmap}
+                        onExplain={() => requestExplanation("heatmap", charts.heatmap)}
+                        onClose={() => closeExplanation("heatmap")}
+                    />
                     <button
                         onClick={() => setExpandedChart(charts.heatmap)}
                         style={{
@@ -186,8 +254,16 @@ export default function Visualizations({ charts: rawData, isLoading }) {
             <div className="charts-grid">
                 {allCharts.map((chart, i) => {
                     const isAi = chart.type === "ai_smart";
+                    const chartKey = `${chart.type}-${i}`;
                     return (
                         <div key={i} className={`chart-card ${isAi ? "ai-highlight" : ""}`} style={{ position: "relative" }}>
+                            <WhyThisChart
+                                chart={chart}
+                                explanation={explanations[chartKey]}
+                                isLoading={explaining[chartKey]}
+                                onExplain={() => requestExplanation(chartKey, chart)}
+                                onClose={() => closeExplanation(chartKey)}
+                            />
                             <button
                                 onClick={() => setExpandedChart(chart)}
                                 style={{
