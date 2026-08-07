@@ -30,7 +30,13 @@ def get_visualizations():
     
     # 2. Get AI suggestions for "smart" charts
     # (Note: In a production app, we might cache this)
-    suggestions = suggest_visualizations(summary)
+    try:
+        suggestions = suggest_visualizations(summary)
+    except Exception as exc:
+        # A provider outage should not prevent the deterministic charts from
+        # being shown to the user.
+        print(f"AI visualization suggestions unavailable: {exc}")
+        suggestions = []
     
     # Generate all charts (standard + AI)
     viz_data = generate_all_charts(df, suggestions)
