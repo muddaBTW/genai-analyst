@@ -228,8 +228,15 @@ def generate_ai_visualizations(df: pd.DataFrame, suggestions: list[dict]) -> lis
     for sug in suggestions:
         try:
             v_type = sug.get("type", "scatter").lower()
-            kwargs = sug.get("kwargs", {})
+            kwargs = dict(sug.get("kwargs", {}))
             title = sug.get("title", "Smart Insight")
+
+            # AI suggestions must work with the deployed dependency set. Plotly's
+            # OLS trendline imports the optional statsmodels package, and Gemini
+            # occasionally uses the invalid `notch` spelling for box plots.
+            kwargs.pop("trendline", None)
+            if v_type == "box" and "notch" in kwargs:
+                kwargs["notched"] = kwargs.pop("notch")
 
             # Basic safety: ensure columns exist
             cols = [v for k, v in kwargs.items() if k in ["x", "y", "color", "facet_col", "size"]]
