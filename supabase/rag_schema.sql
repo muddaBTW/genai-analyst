@@ -31,10 +31,10 @@ create index if not exists rag_rows_embedding_hnsw_idx on public.rag_dataset_row
 create or replace function public.match_dataset_rows(
   query_embedding vector(768), match_dataset_id uuid, match_count integer default 5
 )
-returns table(row_index integer, text text, row jsonb, score float)
+returns table(row_index integer, text text, row_payload jsonb, score float)
 language sql stable
 as $$
-  select row_index, content as text, row_data as row, 1 - (embedding <=> query_embedding) as score
+  select row_index, content as text, row_data as row_payload, 1 - (embedding <=> query_embedding) as score
   from public.rag_dataset_rows
   where dataset_id = match_dataset_id
   order by embedding <=> query_embedding

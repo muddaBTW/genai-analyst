@@ -90,7 +90,15 @@ def _search_supabase(query: str, dataset_id: str, top_k: int) -> list[dict[str, 
         json={"query_embedding": embedding, "match_dataset_id": dataset_id, "match_count": top_k},
     )
     response.raise_for_status()
-    return response.json()
+    return [
+        {
+            "row_index": item["row_index"],
+            "text": item["text"],
+            "row": item["row_payload"],
+            "score": item["score"],
+        }
+        for item in response.json()
+    ]
 
 
 def get_dataset_summary(dataset_id: str) -> str | None:
