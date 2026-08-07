@@ -1,42 +1,21 @@
 /**
  * DatasetOverview — metadata cards + data preview table + column types + missing values.
  */
-import { useState } from "react";
-import { buildIndex } from "../api/client";
-
-  export default function DatasetOverview({ metadata, preview, analysis, datasetId }) {
-    const [building, setBuilding] = useState(false);
+export default function DatasetOverview({ metadata, preview, analysis }) {
     if (!metadata) return null;
 
     return (
         <div className="fade-in">
             <div className="section-header">
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                        <div>
-                            <h2>📊 Dataset Overview</h2>
-                            <p>Preview and metadata for your uploaded dataset</p>
-                        </div>
-                        <div style={{ display: "flex", gap: 8 }}>
-                            <button
-                                className="btn"
-                                onClick={async () => {
-                                    if (!confirm("Build the semantic vector index from the currently uploaded dataset?")) return;
-                                    try {
-                                        setBuilding(true);
-                                         await buildIndex(datasetId);
-                                        alert("Index built successfully.");
-                                    } catch (err) {
-                                        alert("Index build failed: " + err.message);
-                                    } finally {
-                                        setBuilding(false);
-                                    }
-                                }}
-                                disabled={building}
-                            >
-                                {building ? "Building…" : "Build Index"}
-                            </button>
-                        </div>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+                    <div>
+                        <h2>📊 Dataset Overview</h2>
+                        <p>Preview and metadata for your uploaded dataset</p>
                     </div>
+                    <div style={{ fontSize: 12, color: "var(--text-muted)", textAlign: "right", maxWidth: 260 }}>
+                        The semantic index is built automatically after upload.
+                    </div>
+                </div>
             </div>
 
             {/* ── Metadata Cards ─────────────────────────────────── */}

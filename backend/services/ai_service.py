@@ -215,16 +215,17 @@ def generate_report_content(summary: str, insights: str) -> str:
         "- Keep each section brief and easy to scan.\n"
         "- Use bullets where possible instead of long paragraphs.\n"
         "- Refer to the dataset summary and insights only; do not invent facts.\n"
-        "- Include simple markdown tables when comparing numbers, categories, or top relationships.\n"
-        "- Prefer 3 to 5 bullets per section."
+        "- Do not use tables.\n"
+        "- Prefer 3 to 5 bullets per section.\n"
+        "- Keep the tone polished and ChatGPT-like, but compact and structured."
     )
     user = (
         f"Dataset summary:\n{summary}\n\n"
         f"Previously generated insights:\n{insights}\n\n"
         "Formatting guidance:\n"
-        "- Add at least one compact markdown table if you can summarize metrics cleanly.\n"
         "- Keep recommendations actionable and specific.\n"
-        "- Avoid essay-style paragraphs."
+        "- Avoid essay-style paragraphs.\n"
+        "- Use short bullet lists and small labeled subsections instead of dense prose."
     )
     return _chat(system, user, max_tokens=4096)
 
