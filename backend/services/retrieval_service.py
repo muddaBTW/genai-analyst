@@ -5,6 +5,7 @@ import json
 import os
 import pickle
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -45,9 +46,23 @@ def _embed(texts: list[str], task_type: str) -> list[list[float]]:
         {"model": "models/gemini-embedding-2", "content": {"parts": [{"text": text[:32000]}]}, "taskType": task_type, "outputDimensionality": EMBEDDING_DIMENSIONS}
         for text in texts
     ]
-    response = httpx.post(url, params={"key": api_key}, json={"requests": requests}, timeout=55)
-    response.raise_for_status()
-    return [item["values"] for item in response.json()["embeddings"]]
+
+    last_error: Exception | None = None
+    for attempt in range(5):
+        try:
+            response = httpx.post(url, params={"key": api_key}, json={"requests": requests}, timeout=55)
+            response.raise_for_status()
+            return [item["values"] for item in response.json()["embeddings"]]
+        except (httpx.HTTPStatusError, httpx.TransportError) as exc:
+            last_error = exc
+            status_code = getattr(getattr(exc, "response", None), "status_code", None)
+            retriable = status_code in {429, 500, 502, 503, 504} or isinstance(exc, httpx.TransportError)
+            if not retriable or attempt == 4:
+                break
+            time.sleep(2 ** attempt)
+
+    assert last_error is not None
+    raise RuntimeError(f"Gemini embedding request failed after retries: {last_error}") from last_error
 
 
 def row_to_text(idx: int, row: dict[str, Any]) -> str:

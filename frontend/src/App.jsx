@@ -9,7 +9,6 @@ import {
   fetchAnalysis,
   fetchVisualizations,
   fetchInsights,
-  buildIndex,
 } from "./api/client";
 
 import FileUpload from "./components/FileUpload";
@@ -60,7 +59,7 @@ export default function App() {
       setMetadata(data.metadata);
       setPreview(data.preview);
       setDatasetId(data.dataset_id);
-      setRagStatus("indexing");
+      setRagStatus(data.rag_status || "disabled");
       setSection("overview");
 
       // Fire parallel background tasks
@@ -82,13 +81,6 @@ export default function App() {
         .then((res) => setInsights(res.insights))
         .catch(console.error)
         .finally(() => setInsightsLoading(false));
-
-      buildIndex(data.dataset_id)
-        .then(() => setRagStatus("ready"))
-        .catch((error) => {
-          console.error("RAG index build failed", error);
-          setRagStatus("failed");
-        });
     } catch (err) {
       alert("Upload failed: " + err.message);
     } finally {
