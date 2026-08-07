@@ -203,20 +203,28 @@ def generate_report_content(summary: str, insights: str) -> str:
     """Generate full report text from the AI."""
     system = (
         "You are a senior data analyst preparing a professional report. "
-        "Write a comprehensive, well-structured report in markdown format "
-        "with the following sections:\n"
+        "Write a concise, professional report in markdown format with short sections and light narrative. "
+        "Use the following structure exactly:\n"
         "1. Executive Summary\n"
         "2. Dataset Overview\n"
         "3. Key Statistics\n"
-        "4. Detailed Analysis\n"
-        "5. Insights & Findings\n"
-        "6. Recommendations\n"
-        "7. Conclusion\n\n"
-        "Be professional, specific, and reference actual data."
+        "4. Key Findings\n"
+        "5. Recommendations\n"
+        "6. Conclusion\n\n"
+        "Rules:\n"
+        "- Keep each section brief and easy to scan.\n"
+        "- Use bullets where possible instead of long paragraphs.\n"
+        "- Refer to the dataset summary and insights only; do not invent facts.\n"
+        "- Include simple markdown tables when comparing numbers, categories, or top relationships.\n"
+        "- Prefer 3 to 5 bullets per section."
     )
     user = (
         f"Dataset summary:\n{summary}\n\n"
-        f"Previously generated insights:\n{insights}"
+        f"Previously generated insights:\n{insights}\n\n"
+        "Formatting guidance:\n"
+        "- Add at least one compact markdown table if you can summarize metrics cleanly.\n"
+        "- Keep recommendations actionable and specific.\n"
+        "- Avoid essay-style paragraphs."
     )
     return _chat(system, user, max_tokens=4096)
 
