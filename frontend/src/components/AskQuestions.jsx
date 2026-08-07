@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { askQuestion } from "../api/client";
 
-export default function AskQuestions({ hasDataset }) {
+export default function AskQuestions({ hasDataset, datasetId }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export default function AskQuestions({ hasDataset }) {
 
         try {
                 const history = messages.slice(-8).map(({ role, text }) => ({ role, text }));
-                const data = await askQuestion(q, history);
+                const data = await askQuestion(q, history, datasetId);
                 // store retrieved context separately (hidden by default)
                 if (data.retrieved && Array.isArray(data.retrieved) && data.retrieved.length > 0) {
                     setRetrievedContext(data.retrieved);

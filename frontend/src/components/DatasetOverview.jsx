@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { buildIndex } from "../api/client";
 
-export default function DatasetOverview({ metadata, preview, analysis }) {
+  export default function DatasetOverview({ metadata, preview, analysis, datasetId }) {
     const [building, setBuilding] = useState(false);
     if (!metadata) return null;
 
@@ -23,7 +23,7 @@ export default function DatasetOverview({ metadata, preview, analysis }) {
                                     if (!confirm("Build the semantic vector index from the currently uploaded dataset?")) return;
                                     try {
                                         setBuilding(true);
-                                        await buildIndex();
+                                         await buildIndex(datasetId);
                                         alert("Index built successfully.");
                                     } catch (err) {
                                         alert("Index build failed: " + err.message);

@@ -37,6 +37,7 @@ export default function App() {
   const [analysis, setAnalysis] = useState(null);
   const [charts, setCharts] = useState(null);
   const [insights, setInsights] = useState(null);
+  const [datasetId, setDatasetId] = useState(null);
 
   // Loading state
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -56,6 +57,7 @@ export default function App() {
       const data = await uploadDataset(file);
       setMetadata(data.metadata);
       setPreview(data.preview);
+      setDatasetId(data.dataset_id);
       setSection("overview");
 
       // Fire parallel background tasks
@@ -93,14 +95,14 @@ export default function App() {
         return analysisLoading && !analysis ? (
           <LoadingSpinner text="Analyzing dataset…" />
         ) : (
-          <DatasetOverview metadata={metadata} preview={preview} analysis={analysis} />
+          <DatasetOverview metadata={metadata} preview={preview} analysis={analysis} datasetId={datasetId} />
         );
       case "visualizations":
         return <Visualizations charts={charts} isLoading={chartsLoading} />;
       case "insights":
         return <AiInsights insights={insights} isLoading={insightsLoading} />;
       case "ask":
-        return <AskQuestions hasDataset={hasDataset} />;
+        return <AskQuestions hasDataset={hasDataset} datasetId={datasetId} />;
       case "report":
         return <GenerateReport hasDataset={hasDataset} />;
       default:

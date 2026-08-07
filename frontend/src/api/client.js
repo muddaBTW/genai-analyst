@@ -50,11 +50,11 @@ export async function fetchInsights() {
  * Ask a natural-language question about the dataset.
  * @param {string} question
  */
-export async function askQuestion(question, history = []) {
+export async function askQuestion(question, history = [], datasetId = null) {
   const res = await fetch(`${BASE}/query`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question, history }),
+    body: JSON.stringify({ question, history, dataset_id: datasetId }),
   });
   if (!res.ok) throw new Error((await res.json()).detail || "Query failed");
   return res.json();
@@ -74,8 +74,12 @@ export async function explainVisualization(chart) {
 /**
  * Build or rebuild the vector index (RAG) on the backend.
  */
-export async function buildIndex() {
-  const res = await fetch(`${BASE}/index`, { method: "POST" });
+export async function buildIndex(datasetId = null) {
+  const res = await fetch(`${BASE}/index`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ dataset_id: datasetId }),
+  });
   if (!res.ok) throw new Error((await res.json()).detail || "Index build failed");
   return res.json();
 }

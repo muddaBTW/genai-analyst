@@ -140,6 +140,8 @@ The backend exposes routes under `/api` for:
 
 > A valid API key for the configured provider is required for AI insights, natural-language Q&A, chart explanations, and report generation.
 
+> For deployed RAG, run `supabase/rag_schema.sql` in the Supabase SQL Editor, then set `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, and `RAG_ENABLED=true` in Vercel. Without Supabase variables, RAG remains local-development only.
+
 ## License
 
 No license file is currently included in this repository.

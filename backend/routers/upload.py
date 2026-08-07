@@ -3,6 +3,8 @@ Upload Router — accepts CSV/Excel uploads, validates size, returns preview + m
 Uses an in-memory store so subsequent endpoints can reuse the loaded DataFrame.
 """
 
+from uuid import uuid4
+
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
 from services.data_service import load_dataset, get_metadata, get_preview
@@ -42,8 +44,10 @@ async def upload_dataset(file: UploadFile = File(...)):
         raise HTTPException(422, f"Failed to parse file: {e}")
 
     _current_df = df
+    dataset_id = str(uuid4())
 
     return {
+        "dataset_id": dataset_id,
         "filename": file.filename,
         "metadata": get_metadata(df),
         "preview": get_preview(df),
