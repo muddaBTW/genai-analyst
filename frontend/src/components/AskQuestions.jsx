@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { askQuestion } from "../api/client";
 
-export default function AskQuestions({ hasDataset, datasetId }) {
+export default function AskQuestions({ hasDataset, datasetId, ragStatus }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -60,6 +60,9 @@ export default function AskQuestions({ hasDataset, datasetId }) {
             <div className="section-header">
                 <h2>💬 Ask Questions</h2>
                 <p>Chat with your data using natural language</p>
+                {ragStatus === "indexing" && <p style={{ color: "var(--accent-cyan)", marginTop: 6 }}>Preparing semantic search for row-level answers…</p>}
+                {ragStatus === "ready" && <p style={{ color: "#86efac", marginTop: 6 }}>Semantic search is ready.</p>}
+                {ragStatus === "failed" && <p style={{ color: "var(--accent-pink)", marginTop: 6 }}>Semantic search could not be prepared. Build it from Dataset Overview.</p>}
             </div>
 
             <div className="glass-card chat-container">
